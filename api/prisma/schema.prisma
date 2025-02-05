@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id Int @id @default(autoincrement())
+  name String
+  email String @unique
+  password String
+  actions Actions[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Items {
+  id Int @id @default(autoincrement())
+  name String
+  amount Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  actions Actions[]
+  @@map("items")
+}
+
+model Moviments {
+  id Int @id @default(autoincrement())
+  name String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  actions Actions[]
+  @@map("moviments")
+}
+
+model Actions {
+  id Int @id @default(autoincrement())
+  amount Int
+  items Items @relation(fields: [itemsId], references: [id])
+  itemsId Int
+  moviments Moviments @relation(fields: [movimentsId], references: [id])
+  movimentsId Int
+  user Users @relation(fields: [userId], references: [id])
+  userId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("actions")
+}

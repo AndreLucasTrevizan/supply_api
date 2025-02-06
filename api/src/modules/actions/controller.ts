@@ -109,3 +109,37 @@ export const storageOut = async (
 
   res.status(201).json({ action });
 }
+
+export const listStorageActions = async (
+  req: Request,
+  res: Response
+) => {
+
+  const actions = await prisma.actions.findMany({
+    select: {
+      id: true,
+      amount: true,
+      items: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      moviments: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      user: {
+        select: {
+          id: true,
+          name: true,
+        }
+      },
+      createdAt: true,
+    }
+  });
+
+  res.json({ actions });
+}

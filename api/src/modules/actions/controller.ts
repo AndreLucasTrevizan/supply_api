@@ -35,7 +35,6 @@ export const storageEntry = async (
   if (!entry_moviment) {
     throw new Error('Movimento não encontrado');
   }
-  console.log(req.user);
 
   const action = await prisma.actions.create({
     data: {
@@ -49,7 +48,7 @@ export const storageEntry = async (
   await prisma.items.update({
     where: { id: valid_item.id },
     data: {
-      amount,
+      amount: valid_item.amount + Number(amount),
     }
   });
 
@@ -104,7 +103,7 @@ export const storageOut = async (
   await prisma.items.update({
     where: { id: valid_item.id },
     data: {
-      amount: valid_item.amount - amount,
+      amount: valid_item.amount - Number(amount),
     }
   });
 

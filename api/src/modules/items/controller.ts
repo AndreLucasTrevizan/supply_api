@@ -23,3 +23,13 @@ export const createNewItem = async (
 
   res.status(201).json({ item });
 }
+
+export const listItems = async (
+  req: Request,
+  res: Response
+) => {
+
+  const items = await prisma.items.findMany();
+
+  res.json({ items });
+}
